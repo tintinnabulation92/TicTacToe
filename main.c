@@ -12,6 +12,7 @@ int choosePosition(char (*gameGrid)[GRID], char *playerSign, int *who); // ACTUA
 //int choosePositionO(char (*gameGrid)[GRID]);
 void refreshGrid(char (*gameGrid)[GRID]); //refreshes grid putting X or O on the location
 void selectSign(char *p1Sign, char *p2Sign);
+void winCondition(char (*gameGrid)[GRID], bool *gameEnd);
 
 ///////////////////////////////// MAIN ///////////////////////////////////////
 int main()
@@ -33,11 +34,11 @@ int main()
     printf("Player 1 has chosen %c and player 2 has chosen %c \n", _playerOneSign, _playerTwoSign);
     //choosePosition(_gameGrid);
 
-    refreshGrid(_gameGrid);
+    //refreshGrid(_gameGrid);
 
     printf("Player 1 starts.\n"); //_whoPlays = 1
 
-    refreshGrid(_gameGrid);
+    //refreshGrid(_gameGrid);
 
     while(_gameEnd == false) //gra dopoki nie ma konca gry
     {
@@ -45,6 +46,7 @@ int main()
         {
             choosePosition(_gameGrid, &_playerOneSign, &_whoPlays); //ktory gracz ma teraz ture
             refreshGrid(_gameGrid);
+            winCondition(&_gameGrid, &_gameEnd);
 
         }
 
@@ -52,6 +54,7 @@ int main()
         {
             choosePosition(_gameGrid, &_playerTwoSign, &_whoPlays); //ktory gracz ma teraz ture
             refreshGrid(_gameGrid);
+            winCondition(&_gameGrid, &_gameEnd);
 
         }
 
@@ -64,45 +67,129 @@ int main()
 //MODULES&FUNCTIONS///////////////////////////
 //////////////////////////////////////////////
 
+void winCondition(char (*gameGrid)[GRID], bool *gameEnd) //check if a player has won the game
+{
+
+    if (gameGrid[0][0] == 'X' && gameGrid[0][1] == 'X' && gameGrid[0][2] == 'X')
+    {
+        printf("X has won! game has ended!");
+        *gameEnd = true;
+    }
+        else if (gameGrid[0][0] == 'X' && gameGrid[1][0] == 'X' && gameGrid[2][0] == 'X')
+    {
+        printf("X has won! game has ended!");
+        *gameEnd = true;
+    }
+
+    else if (gameGrid[0][1] == 'X' && gameGrid[1][1] == 'X' && gameGrid[2][1] == 'X')
+    {
+        printf("X has won! game has ended!");
+        *gameEnd = true; //
+    }
+    else if (gameGrid[1][0] == 'X' && gameGrid[1][1] == 'X' && gameGrid[1][2] == 'X')
+    {
+        printf("X has won! game has ended!");
+        *gameEnd = true; //
+    }
+    else if (gameGrid[2][0] == 'X' && gameGrid[2][1] == 'X' && gameGrid[2][2] == 'X')
+    {
+        printf("X has won! game has ended!"); // 789
+        *gameEnd = true;
+    }
+    else if (gameGrid[0][2] == 'X' && gameGrid[1][2] == 'X' && gameGrid[2][2] == 'X')
+    {
+        printf("X has won! game has ended!"); //369
+        *gameEnd = true;
+    }
+    else if (gameGrid[0][0] == 'X' && gameGrid[1][1] == 'X' && gameGrid[2][2] == 'X')
+    {
+        printf("X has won! game has ended!"); //159
+        *gameEnd = true;
+    }
+    else if (gameGrid[0][2] == 'X' && gameGrid[1][1] == 'X' && gameGrid[2][0] == 'X')
+    {
+        printf("X has won! game has ended!"); // 357
+        *gameEnd = true;
+    }
+
+
+}
+
+
+
 int choosePosition(char (*gameGrid)[GRID], char *playerSign, int *who)
 {
-    //printf("%c", *playerSign); //dziala
+
     printf("\nwho is playing? player %d\n",*who);
-    printf("\nEnter the position of your mark 1-9");
+    reset:printf("\nEnter the position of your mark 1-9");
     int choice;
     scanf("%d", &choice);
 
-    switch(choice)
+    if (choice>=1 && choice<=9)
     {
-    case 1:
-        gameGrid[0][0] = *playerSign;
-        break;
-    case 2:
-        gameGrid[0][1] = *playerSign;
-        break;
-    case 3:
-        gameGrid[0][2] = *playerSign;
-        break;
-    case 4:
-        gameGrid[1][0] = *playerSign;
-        break;
-    case 5:
-        gameGrid[1][1] = *playerSign;
-        break;
-    case 6:
-        gameGrid[1][2] = *playerSign;
-        break;
-    case 7:
-        gameGrid[2][0] = *playerSign;
-        break;
-    case 8:
-        gameGrid[2][1] = *playerSign;
-        break;
-    case 9:
-        gameGrid[2][2] = *playerSign;
-        break;
 
+
+        switch(choice)
+        {
+        case 1:
+            if (gameGrid[0][0] == 0)
+            gameGrid[0][0] = *playerSign;
+                else
+                    goto reset;
+            break;
+        case 2:
+            if (gameGrid[0][1] ==0)
+            gameGrid[0][1] = *playerSign;
+                else
+                    goto reset;
+            break;
+        case 3:
+            if (gameGrid[0][2] ==0)
+            gameGrid[0][2] = *playerSign;
+            else
+                    goto reset;
+            break;
+        case 4:
+            if (gameGrid[1][0] ==0)
+            gameGrid[1][0] = *playerSign;
+            else
+                    goto reset;
+            break;
+        case 5:
+            if (gameGrid[1][1] ==0)
+            gameGrid[1][1] = *playerSign;
+            else
+                    goto reset;
+            break;
+        case 6:
+            if (gameGrid[1][2] ==0)
+            gameGrid[1][2] = *playerSign;
+            else
+                    goto reset;
+            break;
+        case 7:
+            if (gameGrid[2][0] ==0)
+            gameGrid[2][0] = *playerSign;
+            else
+                    goto reset;
+            break;
+        case 8:
+            if (gameGrid[2][1] ==0)
+            gameGrid[2][1] = *playerSign;
+            else
+                    goto reset;
+            break;
+        case 9:
+            if (gameGrid[2][2] ==0)
+            gameGrid[2][2] = *playerSign;
+            else
+                    goto reset;
+            break;
+
+        }
     }
+
+    else goto reset;
 
     if(*who ==1)
     {
@@ -112,7 +199,7 @@ int choosePosition(char (*gameGrid)[GRID], char *playerSign, int *who)
     {
         *who = 1;
     }
-    printf("\nwho is playing? now WILL player %d\n",*who);
+    //printf("\nwho is playing? now WILL player %d\n",*who);
     return 0;
 
 }
