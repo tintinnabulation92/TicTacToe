@@ -7,8 +7,8 @@
 ////////////////////// FUNCTION DECLARATIONS  ////////////////////////////////
 void welcomePlayer(char *_player1Name, char *_play2Name); // choosing a player and a symbol
 void drawGrid(); //drawing a grid as an 3x3 char array - at the beginning
-int choosePosition(); // ACTUAL GAME IS HERE
-void refreshGrid(); //refreshes grid putting X or O on the location
+int choosePosition(char (*gameGrid)[GRID]); // ACTUAL GAME IS HERE
+void refreshGrid(char (*gameGrid)[GRID]); //refreshes grid putting X or O on the location
 
 ///////////////////////////////// MAIN ///////////////////////////////////////
 int main()
@@ -17,54 +17,17 @@ int main()
     char _playerOne[PLAYER];
     char _playerTwo[PLAYER];
     char _gameGrid[GRID][GRID] = {0};
+    int *p = NULL;
 
     drawGrid();
     welcomePlayer(_playerOne, _playerTwo);
     printf("\n The following players are playing: %s and %s.\n", _playerOne, _playerTwo); // commented
 
-    int choose = choosePosition();     //(&_gameGrid[GRID][GRID]);  - tak przesyla sie tablice w funkcji
-     //
-    switch(choose)
-    {
-            case 1:
-            _gameGrid[0][0] = 'X';
-                break;
-            case 2:
-            _gameGrid[0][1] = 'X';
-                break;
-            case 3:
-            _gameGrid[0][2] = 'X';
-                break;
-            case 4:
-            _gameGrid[1][0] = 'X';
-                break;
-            case 5:
-            _gameGrid[1][1] = 'X';
-                break;
-            case 6:
-            _gameGrid[1][2] = 'X';
-                break;
-            case 7:
-            _gameGrid[2][0] = 'X';
-                break;
-            case 8:
-            _gameGrid[2][1] = 'X';
-                break;
-            case 9:
-            _gameGrid[2][2] = 'X';
-                break;
-    }
+    choosePosition(_gameGrid);
+    refreshGrid(_gameGrid);
 
-for (int x =0; x<GRID; x++) // odswiezenie - trzeba to zrobic w funkcji
-        {
-                for (int y=0; y<GRID; y++)
-                {
-                    printf(" %2c |", _gameGrid[x][y]);
-                }
-            printf("\n");
-            printf("\ ______________");
-            printf("\n\n");
-        }
+
+
 
     return 0;
 }
@@ -73,33 +36,62 @@ for (int x =0; x<GRID; x++) // odswiezenie - trzeba to zrobic w funkcji
 //MODULES&FUNCTIONS///////////////////////////
 //////////////////////////////////////////////
 
-int choosePosition()
+int choosePosition(char (*gameGrid)[GRID])
 {
-    
-    printf("Enter the position of your mark 1-9\n");
-    int choose;
-    scanf("%d", &choose);
-    return choose;
 
-    /*switch(choose)
+    printf("\nEnter the position of your mark 1-9");
+    int choice;
+    scanf("%d", &choice);
+
+    switch(choice)
     {
-            case 1:
-            _grid[0][0] = 'X';
-            break;
-            case 2:
-            _grid[0][1] = 'X'; //
-            break;
-            case 3:
-            _grid[0][2] = 'X';
-            break;
-    }*/
+    case 1:
+        gameGrid[0][0] = 'X';
+        break;
+    case 2:
+        gameGrid[0][1] = 'X';
+        break;
+    case 3:
+        gameGrid[0][2] = 'X';
+        break;
+    case 4:
+        gameGrid[1][0] = 'X';
+        break;
+    case 5:
+        gameGrid[1][1] = 'X';
+        break;
+    case 6:
+        gameGrid[1][2] = 'X';
+        break;
+    case 7:
+        gameGrid[2][0] = 'X';
+        break;
+    case 8:
+        gameGrid[2][1] = 'X';
+        break;
+    case 9:
+        gameGrid[2][2] = 'X';
+        break;
+
+    }
+
+    return 0;
 
 }
 
-void refreshGrid()
+void refreshGrid(char (*gameGrid)[GRID])
 {
 
-    // 
+    for (int x =0; x<GRID; x++)
+        {
+                for (int y=0; y<GRID; y++)
+                {
+                    printf(" %2c |", gameGrid[x][y]);
+                }
+            printf("\n");
+            printf("\ ______________");
+            printf("\n\n");
+        }
 }
 
 void welcomePlayer(char _player1Name[], char _play2Name[])
