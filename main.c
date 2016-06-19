@@ -25,13 +25,14 @@ int main()
     char *p = NULL; //not used yet
     char _playerOneSign;
     char _playerTwoSign;
+    int draw = 0; //val 9 = game is ended
 
     bool _gameEnd = false;
     int _whoPlays = 1;
-    //drawGrid();
-    //welcomePlayer(_playerOne, _playerTwo);
+    drawGrid();
+    welcomePlayer(_playerOne, _playerTwo);
     selectSign(&_playerOneSign, &_playerTwoSign);
-    //printf("\n The following players are playing: %s and %s.\n", _playerOne, _playerTwo); // commented
+    printf("\n The following players are playing: %s and %s.\n", _playerOne, _playerTwo); // commented
     printf("Player 1 has chosen %c and player 2 has chosen %c \n", _playerOneSign, _playerTwoSign);
     //choosePosition(_gameGrid);
 
@@ -43,22 +44,28 @@ int main()
 
     while(_gameEnd == false) //gra dopoki nie ma konca gry
     {
-        if (_whoPlays == 1)
+        if (_whoPlays == 1 && draw<9)
         {
             choosePosition(_gameGrid, &_playerOneSign, &_whoPlays); //ktory gracz ma teraz ture
             refreshGrid(_gameGrid);
             winConditionX(&_gameGrid, &_gameEnd);
             winConditionO(&_gameGrid, &_gameEnd);
+            ++draw;
 
         }
 
-        else if (_whoPlays == 2)
+        else if (_whoPlays == 2 && draw<9)
         {
             choosePosition(_gameGrid, &_playerTwoSign, &_whoPlays); //ktory gracz ma teraz ture
             refreshGrid(_gameGrid);
             winConditionX(&_gameGrid, &_gameEnd);
             winConditionO(&_gameGrid, &_gameEnd);
+            ++draw;
+        }
 
+        else {
+            printf("Draw! game is over");
+            _gameEnd = true;
         }
 
     }
@@ -72,6 +79,8 @@ int main()
 
 void winConditionX(char (*gameGrid)[GRID], bool *gameEnd) //check if a player has won the game
 {
+
+
 
     if (gameGrid[0][0] == 'X' && gameGrid[0][1] == 'X' && gameGrid[0][2] == 'X')
     {
