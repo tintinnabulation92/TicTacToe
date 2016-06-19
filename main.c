@@ -26,7 +26,7 @@ int main()
     //welcomePlayer(_playerOne, _playerTwo);
     selectSign(&_playerOneSign, &_playerTwoSign);
     //printf("\n The following players are playing: %s and %s.\n", _playerOne, _playerTwo); // commented
-    printf(" p1 %d  p2 %d \n", _playerOneSign, _playerTwoSign);
+    printf("Player 1 has chosen %c and player 2 has chosen %c \n", _playerOneSign, _playerTwoSign);
     //choosePosition(_gameGrid);
     //refreshGrid(_gameGrid);
 
@@ -98,26 +98,44 @@ void refreshGrid(char (*gameGrid)[GRID])
         }
 }
 
-void selectSign(char *p1Sign, char *p2Sign) // errori in this function, have to modify it
+void selectSign(char *p1Sign, char *p2Sign)
 
 {
-char tempVar1, tempVar2;
-printf("Player 1: Select your symbol. 'X' or 'O' ? Type..");
-scanf("%c", &tempVar1);
+    poczatek:
+    printf("\nPlayer 1: Select your symbol. 'X' or 'O' ? Type..");
+    scanf("%c", p1Sign);
 
-p1Sign = &tempVar1;
-*p1Sign = tempVar1;
-//p1Sign = NULL;
+        if (*p1Sign == 'X' || *p1Sign == 'O')
+        {
 
-printf("\n Player 2: Select your symbol. 'X' or 'O' ? Type.."); //trzeba dac warunek zabezpieczajacy program
-scanf(" %c", &tempVar2);
-                                     // zeby gosc nie wybral sobie XX albo OO
+            reset2:printf("\nPlayer 2: Select your symbol. 'X' or 'O' ? Type.."); //reset condition
+            scanf(" %c", p2Sign);
 
-p2Sign = &tempVar2;
-*p2Sign = tempVar2;
-//p2Sign = NULL;
+                if (*p1Sign == *p2Sign) // secure the choice - doubled sign is not allowed
+                {
+                    printf("You are not allowed to double this sign - %c. Try again!\n", *p1Sign);
+                    goto reset2;
+                }
 
-//printf("Player 1 has chosen %c and player 2 has chosen %c \n", *p1Sign, *p2Sign); dziala
+                    else if (*p2Sign == 'X' || *p2Sign == 'O')
+                    {
+                         return 0; // wybor normalny
+                    }
+
+                        else
+                            {
+                                printf("You are not allowed to use this character. Try again!");
+                                goto reset2;
+                            }
+        }
+
+        else
+        {
+
+            printf("You are not allowed to use this character. Try again!\n");
+            goto poczatek;
+        }
+
 }
 
 void welcomePlayer(char _player1Name[], char _play2Name[])
