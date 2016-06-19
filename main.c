@@ -9,6 +9,7 @@ void welcomePlayer(char *_player1Name, char *_play2Name); // choosing a player a
 void drawGrid(); //drawing a grid as an 3x3 char array - at the beginning
 int choosePosition(char (*gameGrid)[GRID]); // ACTUAL GAME IS HERE
 void refreshGrid(char (*gameGrid)[GRID]); //refreshes grid putting X or O on the location
+void selectSign(char *p1Sign, char *p2Sign);
 
 ///////////////////////////////// MAIN ///////////////////////////////////////
 int main()
@@ -17,14 +18,17 @@ int main()
     char _playerOne[PLAYER];
     char _playerTwo[PLAYER];
     char _gameGrid[GRID][GRID] = {0};
-    int *p = NULL;
+    char *p = NULL; //not used yet
+    char _playerOneSign;
+    char _playerTwoSign;
 
-    drawGrid();
-    welcomePlayer(_playerOne, _playerTwo);
-    printf("\n The following players are playing: %s and %s.\n", _playerOne, _playerTwo); // commented
-
-    choosePosition(_gameGrid);
-    refreshGrid(_gameGrid);
+    //drawGrid();
+    //welcomePlayer(_playerOne, _playerTwo);
+    selectSign(&_playerOneSign, &_playerTwoSign);
+    //printf("\n The following players are playing: %s and %s.\n", _playerOne, _playerTwo); // commented
+    printf(" p1 %d  p2 %d \n", _playerOneSign, _playerTwoSign);
+    //choosePosition(_gameGrid);
+    //refreshGrid(_gameGrid);
 
 
 
@@ -94,6 +98,28 @@ void refreshGrid(char (*gameGrid)[GRID])
         }
 }
 
+void selectSign(char *p1Sign, char *p2Sign) // errori in this function, have to modify it
+
+{
+char tempVar1, tempVar2;
+printf("Player 1: Select your symbol. 'X' or 'O' ? Type..");
+scanf("%c", &tempVar1);
+
+p1Sign = &tempVar1;
+*p1Sign = tempVar1;
+//p1Sign = NULL;
+
+printf("\n Player 2: Select your symbol. 'X' or 'O' ? Type.."); //trzeba dac warunek zabezpieczajacy program
+scanf(" %c", &tempVar2);
+                                     // zeby gosc nie wybral sobie XX albo OO
+
+p2Sign = &tempVar2;
+*p2Sign = tempVar2;
+//p2Sign = NULL;
+
+//printf("Player 1 has chosen %c and player 2 has chosen %c \n", *p1Sign, *p2Sign); dziala
+}
+
 void welcomePlayer(char _player1Name[], char _play2Name[])
 {
     printf("Welcome to TicTacToe. Please Enter P1 name:");
@@ -101,21 +127,6 @@ void welcomePlayer(char _player1Name[], char _play2Name[])
     printf("Type P2 name:");
     scanf("%s", _play2Name);
 
-    printf("Auf einem quadratischen, 3×3 Felder großen Spielfeld setzen"
-           "die beiden Spieler abwechselnd ihr Zeichen (ein Spieler Kreuze,"
-           "der andere Kreise) in ein freies Feld. Der Spieler, "
-           "der als Erster drei Zeichen in eine Zeile,"
-           "Spalte oder Diagonale setzen kann, gewinnt.\n"
-           "Wenn allerdings beide Spieler optimal spielen,"
-           "kann keiner gewinnen, und es kommt zu einem Unentschieden.\n"
-           "Das heißt, alle neun Felder sind gefüllt,"
-           "ohne dass ein Spieler die erforderlichen Zeichen in"
-            "einer Reihe, Spalte oder Diagonalen setzen konnte.\n\n\n\n");
-
-
-
-    //printf("You can choose rather to play as 'X' or as 'O'. Select your symbol:");
-    //input..^
 }
 
 void drawGrid()
