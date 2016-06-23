@@ -11,10 +11,10 @@ void drawGrid(); //drawing a grid as an 3x3 char array - at the beginning
 int choosePosition(char (*gameGrid)[GRID], char *playerSign, int *who); // ACTUAL GAME IS HERE
 //int choosePositionO(char (*gameGrid)[GRID]);
 void refreshGrid(char (*gameGrid)[GRID]); //refreshes grid putting X or O on the location
-void selectSign(char *p1Sign, char *p2Sign);
-void winConditionX(char (*gameGrid)[GRID], bool *gameEnd, int *p1Score);
-void winConditionO(char (*gameGrid)[GRID], bool *gameEnd, int *p2Score);
-void restartGame(char (*gameGrid)[GRID], int *restart);
+void selectSign(char *p1Sign, char *p2Sign); //fixed positions
+void winConditionX(char (*gameGrid)[GRID], bool *gameEnd, int *p1Score);//checks if p1 has won
+void winConditionO(char (*gameGrid)[GRID], bool *gameEnd, int *p2Score);//checks if p2 has won
+//void restartGame(char (*gameGrid)[GRID], int *restart);
 
 ///////////////////////////////// MAIN ///////////////////////////////////////
 int main()
@@ -109,7 +109,7 @@ int main()
 
 
     return 0;
-}
+} //end of main
 
 //////////////////////////////////////////////
 //MODULES&FUNCTIONS///////////////////////////
@@ -393,7 +393,7 @@ void welcomePlayer(char _player1Name[], char _play2Name[])
 
 }
 
-void drawGrid()
+void drawGrid() //shows the starting positions on the grid
 {
     char _startingGrid[GRID][GRID] = {{49,50,51}, {52,53,54}, {55,56,57}};
     printf("\n\n\n\n\n");
