@@ -12,8 +12,9 @@ int choosePosition(char (*gameGrid)[GRID], char *playerSign, int *who); // ACTUA
 //int choosePositionO(char (*gameGrid)[GRID]);
 void refreshGrid(char (*gameGrid)[GRID]); //refreshes grid putting X or O on the location
 void selectSign(char *p1Sign, char *p2Sign);
-void winConditionX(char (*gameGrid)[GRID], bool *gameEnd);
-void winConditionO(char (*gameGrid)[GRID], bool *gameEnd);
+void winConditionX(char (*gameGrid)[GRID], bool *gameEnd, int *p1Score);
+void winConditionO(char (*gameGrid)[GRID], bool *gameEnd, int *p2Score);
+void restartGame(char (*gameGrid)[GRID], int *restart);
 
 ///////////////////////////////// MAIN ///////////////////////////////////////
 int main()
@@ -26,49 +27,86 @@ int main()
     char _playerOneSign;
     char _playerTwoSign;
     int draw = 0; //val 9 = game is ended
+    int _p1Score = 0;
+    int _p2Score = 0;
+    int _restartCondition = 1;
 
     bool _gameEnd = false;
-    int _whoPlays = 1;
+    int _whoPlays = 1; // 1 == game continues
     drawGrid();
     welcomePlayer(_playerOne, _playerTwo);
     selectSign(&_playerOneSign, &_playerTwoSign);
-    printf("\n The following players are playing: %s and %s.\n", _playerOne, _playerTwo); // commented
-    printf("Player 1 has chosen %c and player 2 has chosen %c \n", _playerOneSign, _playerTwoSign);
+    printf("\n The following players are playing: %s and %s.\n\n", _playerOne, _playerTwo); // commented
+    printf("Player 1 has chosen %c and player 2 has chosen %c \n\n", _playerOneSign, _playerTwoSign);
     //choosePosition(_gameGrid);
 
     //refreshGrid(_gameGrid);
 
-    printf("Player 1 starts.\n"); //_whoPlays = 1
+    printf("Player 1 starts.\n\n"); //_whoPlays = 1
 
     //refreshGrid(_gameGrid);
 
-    while(_gameEnd == false) //gra dopoki nie ma konca gry
+    OnceAgain:_gameEnd = false;
+
+    int u,i;
+    for(u = 0; u < 3; u++)
+{
+    for(i = 0; i < 3; i++)
+    {
+        _gameGrid[u][i] = 0; //clearing out the array
+    }
+}
+
+
+    while(_gameEnd == false) //as long as the game goest
     {
         if (_whoPlays == 1 && draw<9)
         {
-            choosePosition(_gameGrid, &_playerOneSign, &_whoPlays); //ktory gracz ma teraz ture
+            choosePosition(_gameGrid, &_playerOneSign, &_whoPlays); //players turn
             refreshGrid(_gameGrid);
-            winConditionX(&_gameGrid, &_gameEnd);
-            winConditionO(&_gameGrid, &_gameEnd);
+            winConditionX(&_gameGrid, &_gameEnd, &_p1Score);
+            winConditionO(&_gameGrid, &_gameEnd, &_p2Score);
             ++draw;
 
         }
 
         else if (_whoPlays == 2 && draw<9)
         {
-            choosePosition(_gameGrid, &_playerTwoSign, &_whoPlays); //ktory gracz ma teraz ture
+            choosePosition(_gameGrid, &_playerTwoSign, &_whoPlays); //players turn
             refreshGrid(_gameGrid);
-            winConditionX(&_gameGrid, &_gameEnd);
-            winConditionO(&_gameGrid, &_gameEnd);
+            winConditionX(&_gameGrid, &_gameEnd, &_p1Score);
+            winConditionO(&_gameGrid, &_gameEnd, &_p2Score);
             ++draw;
         }
 
         else {
-            printf("Draw! game is over");
+            printf("\nDraw! game is over\n");
             _gameEnd = true;
         }
 
     }
+
+    if (_gameEnd == true)
+    {
+        //restartGame(&_gameGrid, &_restartCondition);
+        memset(_gameGrid, 0, sizeof(_gameGrid[GRID][GRID]) * 3 * 3);
+        printf("\nPlayer 1 - %s score is: %d. Player 2 - %s Score is %d.\n",_playerOne, _p1Score, _playerTwo, _p2Score);
+        printf("\nWould you like to play again? 1 = YES. 2 = NO and Quit.");
+        scanf("%d", &_restartCondition);
+
+            printf("\n");
+            if (_restartCondition == 1)
+            {
+                //_gameGrid[GRID][GRID] = {0};
+
+                draw = 0;
+                goto OnceAgain;
+
+
+            }
+
+    }
+
 
     return 0;
 }
@@ -77,7 +115,7 @@ int main()
 //MODULES&FUNCTIONS///////////////////////////
 //////////////////////////////////////////////
 
-void winConditionX(char (*gameGrid)[GRID], bool *gameEnd) //check if a player has won the game
+void winConditionX(char (*gameGrid)[GRID], bool *gameEnd, int *p1Score) //check if a player has won the game
 {
 
 
@@ -85,90 +123,106 @@ void winConditionX(char (*gameGrid)[GRID], bool *gameEnd) //check if a player ha
     if (gameGrid[0][0] == 'X' && gameGrid[0][1] == 'X' && gameGrid[0][2] == 'X')
     {
         printf("X has won! game has ended!");
+        *p1Score = *p1Score+1;
         *gameEnd = true;
     }
         else if (gameGrid[0][0] == 'X' && gameGrid[1][0] == 'X' && gameGrid[2][0] == 'X')
     {
         printf("X has won! game has ended!");
+        *p1Score = *p1Score+1;
         *gameEnd = true;
     }
 
     else if (gameGrid[0][1] == 'X' && gameGrid[1][1] == 'X' && gameGrid[2][1] == 'X')
     {
         printf("X has won! game has ended!");
+        *p1Score = *p1Score+1;
         *gameEnd = true; //
     }
     else if (gameGrid[1][0] == 'X' && gameGrid[1][1] == 'X' && gameGrid[1][2] == 'X')
     {
         printf("X has won! game has ended!");
+        *p1Score = *p1Score+1;
         *gameEnd = true; //
     }
     else if (gameGrid[2][0] == 'X' && gameGrid[2][1] == 'X' && gameGrid[2][2] == 'X')
     {
         printf("X has won! game has ended!"); // 789
+        *p1Score = *p1Score+1;
         *gameEnd = true;
     }
     else if (gameGrid[0][2] == 'X' && gameGrid[1][2] == 'X' && gameGrid[2][2] == 'X')
     {
         printf("X has won! game has ended!"); //369
+        *p1Score = *p1Score+1;
         *gameEnd = true;
     }
     else if (gameGrid[0][0] == 'X' && gameGrid[1][1] == 'X' && gameGrid[2][2] == 'X')
     {
         printf("X has won! game has ended!"); //159
+        *p1Score = *p1Score+1;
         *gameEnd = true;
     }
     else if (gameGrid[0][2] == 'X' && gameGrid[1][1] == 'X' && gameGrid[2][0] == 'X')
     {
         printf("X has won! game has ended!"); // 357
+        *p1Score = *p1Score+1;
         *gameEnd = true;
     }
 
 
 }
 
-void winConditionO(char (*gameGrid)[GRID], bool *gameEnd) //check if a player has won the game
+void winConditionO(char (*gameGrid)[GRID], bool *gameEnd, int *p2Score) //check if a player has won the game
 {
 
     if (gameGrid[0][0] == 'O' && gameGrid[0][1] == 'O' && gameGrid[0][2] == 'O')
     {
         printf("O has won! game has ended!");
+        *p2Score = *p2Score + 1;
         *gameEnd = true;
     }
         else if (gameGrid[0][0] == 'O' && gameGrid[1][0] == 'O' && gameGrid[2][0] == 'O')
     {
         printf("O has won! game has ended!");
+        *p2Score = *p2Score + 1;
         *gameEnd = true;
     }
 
     else if (gameGrid[0][1] == 'O' && gameGrid[1][1] == 'O' && gameGrid[2][1] == 'O')
     {
         printf("O has won! game has ended!");
+        *p2Score = *p2Score + 1;
         *gameEnd = true; //
     }
     else if (gameGrid[1][0] == 'O' && gameGrid[1][1] == 'O' && gameGrid[1][2] == 'O')
     {
         printf("O has won! game has ended!");
+        *p2Score = *p2Score + 1;
         *gameEnd = true; //
     }
     else if (gameGrid[2][0] == 'O' && gameGrid[2][1] == 'O' && gameGrid[2][2] == 'O')
     {
         printf("O has won! game has ended!"); // 789
+        *p2Score = *p2Score + 1;
         *gameEnd = true;
     }
     else if (gameGrid[0][2] == 'O' && gameGrid[1][2] == 'O' && gameGrid[2][2] == 'O')
     {
         printf("O has won! game has ended!"); //369
+        *p2Score = *p2Score + 1;
         *gameEnd = true;
     }
     else if (gameGrid[0][0] == 'O' && gameGrid[1][1] == 'O' && gameGrid[2][2] == 'O')
     {
         printf("O has won! game has ended!"); //159
+        *p2Score = *p2Score + 1;
         *gameEnd = true;
     }
     else if (gameGrid[0][2] == 'O' && gameGrid[1][1] == 'X' && gameGrid[2][0] == 'O')
     {
         printf("O has won! game has ended!"); // 357
+        *p2Score = *p2Score + 1;
         *gameEnd = true;
     }
 
@@ -181,10 +235,11 @@ void winConditionO(char (*gameGrid)[GRID], bool *gameEnd) //check if a player ha
 
 int choosePosition(char (*gameGrid)[GRID], char *playerSign, int *who)
 {
+    int choice = 0;
+    printf("\nPlayer %d is playing.\n",*who);
+    reset:printf("\nEnter the position of your mark (1-9)\n");
 
-    printf("\nwho is playing? player %d\n",*who);
-    reset:printf("\nEnter the position of your mark 1-9");
-    int choice;
+
     scanf("%d", &choice);
 
     if (choice>=1 && choice<=9)
@@ -249,9 +304,13 @@ int choosePosition(char (*gameGrid)[GRID], char *playerSign, int *who)
             break;
 
         }
+
+
     }
 
-    else goto reset;
+
+
+
 
     if(*who ==1)
     {
@@ -284,40 +343,44 @@ void refreshGrid(char (*gameGrid)[GRID])
 void selectSign(char *p1Sign, char *p2Sign)
 
 {
-    poczatek:
-    printf("\nPlayer 1: Select your symbol. 'X' or 'O' ? Type..");
-    scanf("%c", p1Sign);
+    *p1Sign = 'X'; *p2Sign = 'O'; //automatic assign
 
-        if (*p1Sign == 'X' || *p1Sign == 'O')
-        {
 
-            reset2:printf("\nPlayer 2: Select your symbol. 'X' or 'O' ? Type.."); //reset condition
-            scanf(" %c", p2Sign);
-
-                if (*p1Sign == *p2Sign) // secure the choice - doubled sign is not allowed
-                {
-                    printf("You are not allowed to double this sign - %c. Try again!\n", *p1Sign);
-                    goto reset2;
-                }
-
-                    else if (*p2Sign == 'X' || *p2Sign == 'O')
-                    {
-                         return 0; // wybor normalny
-                    }
-
-                        else
-                            {
-                                printf("You are not allowed to use this character. Try again!");
-                                goto reset2;
-                            }
-        }
-
-        else
-        {
-
-            printf("You are not allowed to use this character. Try again!\n");
-            goto poczatek;
-        }
+//    poczatek:
+//        *p1Sign = 0; *p2Sign = 0;
+//    printf("\nPlayer 1: Select your symbol. 'X' or 'O' ? Type..\n");
+//    scanf(" %c", p1Sign);
+//
+//        if (*p1Sign == 'X' || *p1Sign == 'O')
+//        {
+//
+//            reset2:printf("\nPlayer 2: Select your symbol. 'X' or 'O' ? Type.."); //reset condition
+//            scanf(" %c", p2Sign);
+//
+//                if (*p1Sign == *p2Sign) // secure the choice - doubled sign is not allowed
+//                {
+//                    printf("You are not allowed to double this sign - %c. Try again!\n", *p1Sign);
+//                    goto reset2;
+//                }
+//
+//                    else if (*p2Sign == 'X' || *p2Sign == 'O')
+//                    {
+//                         return 0; // wybor normalny
+//                    }
+//
+//                        else
+//                            {
+//                                printf("You are not allowed to use this character. Try again!");
+//                                goto reset2;
+//                            }
+//        }
+//
+//        else
+//        {
+//
+//            printf("You are not allowed to use this character. Try again!\n");
+//            goto poczatek;
+//        }
 
 }
 
@@ -351,3 +414,21 @@ void drawGrid()
 
         }
 }
+
+//void restartGame(char (*gameGrid)[GRID], int *restart)
+//{
+//
+//    printf("\nWould you like to play again? 1 = YES. 2 = NO and Quit.");
+//    scanf("%d", restart);
+//
+//    printf("\n");
+//    if (restart == 1)
+//    {
+//        gameGrid[GRID][GRID] = {0};
+//    }
+//
+//    else if (restart == 2)
+//    {
+//
+//    }
+//}
